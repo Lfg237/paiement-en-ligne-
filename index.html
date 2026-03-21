@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Paiement</title>
+<title>Paiement en ligne</title>
 
 <style>
 body{
@@ -54,11 +54,13 @@ button{
 <!-- LOGO -->
 <img class="logo" src="https://raw.githubusercontent.com/Lfg237/m-dias/main/received_1672125010898590.jpeg">
 
-<h3>🎬 Vidéo Premium</h3>
+<h3>🎬 Cours éducatif</h3>
 <p><strong>Prix : 1000 FCFA</strong></p>
 
+<!-- INPUT TELEPHONE -->
 <input type="tel" id="phone" placeholder="Entrer votre numéro (ex: 699000000)">
 
+<!-- BOUTON -->
 <button onclick="payer()">Payer maintenant</button>
 
 </div>
@@ -73,7 +75,7 @@ function payer(){
     return;
   }
 
-  fetch("https://my-coolpay.com/api/TON_PUBLIC_KEY/paylink", {
+  fetch("https://my-coolpay.com/api/a471832d-a539-437f-bcba-247f3e9e607c/paylink", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -82,7 +84,7 @@ function payer(){
     body: JSON.stringify({
       transaction_amount: 1000,
       transaction_currency: "XAF",
-      transaction_reason: "Video Premium",
+      transaction_reason: "Cours éducatif",
       app_transaction_ref: "ref_" + Date.now(),
       customer_phone_number: phone,
       customer_name: "Client",
