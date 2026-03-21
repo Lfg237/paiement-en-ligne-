@@ -1,4 +1,4 @@
-export default async function handler(req, res) {
+export default function handler(req, res) {
 
   if (req.method === "POST") {
 
@@ -7,15 +7,13 @@ export default async function handler(req, res) {
     console.log("Paiement reçu :", data);
 
     if (data.transaction_status === "SUCCESS") {
-
-      // Ici tu peux débloquer contenu
-      console.log("Paiement validé ✅");
-
+      console.log("✅ Paiement validé !");
+    } else {
+      console.log("⏳ Paiement en attente...");
     }
 
-    res.status(200).json({ status: "ok" });
-
-  } else {
-    res.status(405).end();
+    return res.status(200).json({ status: "OK" });
   }
+
+  return res.status(200).send("API active");
 }
