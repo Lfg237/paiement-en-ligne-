@@ -2,59 +2,107 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Paiement</title>
+<title>Paiement en ligne</title>
+
 <style>
-body{font-family:Arial;text-align:center;padding:50px;background:#f5f5f5;}
-.box{max-width:400px;margin:auto;background:white;padding:20px;border-radius:10px;box-shadow:0 0 10px #ccc;}
-button{background:#ff6600;color:white;border:none;padding:12px;width:100%;border-radius:6px;}
+body{
+  font-family:Arial;
+  text-align:center;
+  padding:50px;
+  background:#f5f5f5;
+}
+
+.box{
+  max-width:400px;
+  margin:auto;
+  background:white;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 0 10px #ccc;
+}
+
+button{
+  background:#ff6600;
+  color:white;
+  border:none;
+  padding:12px;
+  margin:10px;
+  width:100%;
+  border-radius:6px;
+  font-size:16px;
+  cursor:pointer;
+}
+
+button:hover{
+  background:#e65c00;
+}
+
+.paiement{
+  margin-top:20px;
+  padding:15px;
+  background:#f0f0f0;
+  border-radius:10px;
+}
+
+.paiement img{
+  background:white;
+  padding:5px;
+  border-radius:8px;
+  box-shadow:0 0 5px #ccc;
+}
 </style>
+
 </head>
 <body>
 
 <div class="box">
-<h2>Payer maintenant</h2>
 
-<select id="prix">
-<option value="500">500 FCFA</option>
-<option value="1000">1000 FCFA</option>
-<option value="2000">2000 FCFA</option>
-</select>
+<h2>💳 Acheter un produit</h2>
 
-<input type="tel" id="phone" placeholder="Numéro" style="width:100%;margin:10px 0;padding:10px;">
+<button onclick="payer(500, 'Video 1')">
+Acheter Vidéo 1 - 500 FCFA
+</button>
 
-<button onclick="payer()">Payer</button>
+<button onclick="payer(1000, 'Ebook')">
+Acheter Ebook - 1000 FCFA
+</button>
 
-<p id="msg"></p>
+<button onclick="payer(2000, 'Formation')">
+Acheter Formation - 2000 FCFA
+</button>
+
+<!-- Moyens de paiement -->
+<div class="paiement">
+  <p>✅ Paiement sécurisé</p>
+
+  <div style="display:flex;justify-content:center;gap:20px;margin-top:10px;align-items:center;">
+
+    <div>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/MTN_Logo.svg" width="60">
+      <p style="font-size:12px;">MTN MoMo</p>
+    </div>
+
+    <div>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/c/c8/Orange_logo.svg" width="60">
+      <p style="font-size:12px;">Orange Money</p>
+    </div>
+
+  </div>
+</div>
+
 </div>
 
 <script>
-function payer(){
+function payer(prix, produit){
 
-let montant = document.getElementById("prix").value;
-let phone = document.getElementById("phone").value;
+let url = "https://my-coolpay.com/pay?"
++ "amount=" + prix
++ "&reason=" + produit
++ "&return_url=https://paiement-en-ligne.vercel.app/success.html"
++ "&cancel_url=https://paiement-en-ligne.vercel.app/cancel.html"
++ "&error_url=https://paiement-en-ligne.vercel.app/error.html";
 
-fetch("https://my-coolpay.com/api/pay", {
-method: "POST",
-headers: {
-"Content-Type": "application/json",
-"API-KEY": "TON_API_KEY_ICI"
-},
-body: JSON.stringify({
-transaction_amount: montant,
-transaction_phone: phone,
-transaction_reason: "Paiement service",
-return_url: "https://tonsite.vercel.app/success.html",
-cancel_url: "https://tonsite.vercel.app/cancel.html",
-error_url: "https://tonsite.vercel.app/error.html"
-})
-})
-.then(res => res.json())
-.then(data => {
-document.getElementById("msg").innerText = "Confirme sur ton téléphone 📱";
-})
-.catch(err => {
-document.getElementById("msg").innerText = "Erreur ❌";
-});
+window.location.href = url;
 
 }
 </script>
