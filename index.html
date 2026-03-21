@@ -2,14 +2,14 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Paiement en ligne</title>
+<title>Boutique</title>
 
 <style>
 body{
   font-family:Arial;
-  text-align:center;
-  padding:50px;
   background:#f5f5f5;
+  padding:40px;
+  text-align:center;
 }
 
 .box{
@@ -21,12 +21,15 @@ body{
   box-shadow:0 0 10px #ccc;
 }
 
+.produit{
+  margin-bottom:30px;
+}
+
 button{
   background:#ff6600;
   color:white;
   border:none;
   padding:12px;
-  margin:10px;
   width:100%;
   border-radius:6px;
   font-size:16px;
@@ -45,10 +48,8 @@ button:hover{
 }
 
 .paiement img{
-  background:white;
-  padding:5px;
-  border-radius:8px;
-  box-shadow:0 0 5px #ccc;
+  width:50px;
+  margin:5px;
 }
 </style>
 
@@ -57,37 +58,41 @@ button:hover{
 
 <div class="box">
 
-<h2>💳 Acheter un produit</h2>
+<h2>🛒 Mes Produits</h2>
 
-<button onclick="payer(500, 'Video 1')">
-Acheter Vidéo 1 - 500 FCFA
-</button>
+<!-- PRODUIT 1 -->
+<div class="produit">
+  <h3>🎬 Vidéo Premium</h3>
+  <p><strong>Prix : 1000 FCFA</strong></p>
+  <button onclick="payer(1000, 'Video Premium')">
+    Acheter maintenant
+  </button>
+</div>
 
-<button onclick="payer(1000, 'Ebook')">
-Acheter Ebook - 1000 FCFA
-</button>
+<!-- PRODUIT 2 -->
+<div class="produit">
+  <h3>📘 Ebook</h3>
+  <p><strong>Prix : 1500 FCFA</strong></p>
+  <button onclick="payer(1500, 'Ebook')">
+    Acheter maintenant
+  </button>
+</div>
 
-<button onclick="payer(2000, 'Formation')">
-Acheter Formation - 2000 FCFA
-</button>
+<!-- PRODUIT 3 -->
+<div class="produit">
+  <h3>🎓 Formation</h3>
+  <p><strong>Prix : 3000 FCFA</strong></p>
+  <button onclick="payer(3000, 'Formation')">
+    Acheter maintenant
+  </button>
+</div>
 
 <!-- Moyens de paiement -->
 <div class="paiement">
   <p>✅ Paiement sécurisé</p>
-
-  <div style="display:flex;justify-content:center;gap:20px;margin-top:10px;align-items:center;">
-
-    <div>
-      <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/MTN_Logo.svg" width="60">
-      <p style="font-size:12px;">MTN MoMo</p>
-    </div>
-
-    <div>
-      <img src="https://upload.wikimedia.org/wikipedia/commons/c/c8/Orange_logo.svg" width="60">
-      <p style="font-size:12px;">Orange Money</p>
-    </div>
-
-  </div>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/MTN_Logo.svg">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/c/c8/Orange_logo.svg">
+  <p>MTN MoMo & Orange Money acceptés</p>
 </div>
 
 </div>
@@ -95,14 +100,30 @@ Acheter Formation - 2000 FCFA
 <script>
 function payer(prix, produit){
 
-let url = "https://my-coolpay.com/pay?"
-+ "amount=" + prix
-+ "&reason=" + produit
-+ "&return_url=https://paiement-en-ligne.vercel.app/success.html"
-+ "&cancel_url=https://paiement-en-ligne.vercel.app/cancel.html"
-+ "&error_url=https://paiement-en-ligne.vercel.app/error.html";
-
-window.location.href = url;
+  fetch("https://my-coolpay.com/api/TON_PUBLIC_KEY/paylink", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    body: JSON.stringify({
+      transaction_amount: prix,
+      transaction_currency: "XAF",
+      transaction_reason: produit,
+      app_transaction_ref: "ref_" + Date.now(),
+      customer_name: "Client",
+      customer_email: "client@email.com",
+      customer_lang: "fr"
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if(data.payment_url){
+      window.location.href = data.payment_url;
+    } else {
+      alert("Erreur paiement");
+    }
+  });
 
 }
 </script>
