@@ -93,14 +93,16 @@ function payer(){
     })
   })
   .then(res => res.json())
-  .then(data => {
-    if(data.payment_url){
-      window.location.href = data.payment_url;
-    } else {
-      alert("Erreur paiement");
-    }
-  });
+ .then(res => res.json())
+.then(data => {
+  console.log(data); // 👈 IMPORTANT
 
+  if(data.payment_url){
+    window.location.href = data.payment_url;
+  } else {
+    alert("Erreur paiement: " + JSON.stringify(data));
+  }
+});
 }
 </script>
 
