@@ -2,18 +2,18 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Boutique</title>
+<title>Paiement</title>
 
 <style>
 body{
   font-family:Arial;
   background:#f5f5f5;
-  padding:40px;
   text-align:center;
+  padding:50px;
 }
 
 .box{
-  max-width:400px;
+  max-width:350px;
   margin:auto;
   background:white;
   padding:20px;
@@ -21,8 +21,12 @@ body{
   box-shadow:0 0 10px #ccc;
 }
 
-.produit{
-  margin-bottom:30px;
+input{
+  width:100%;
+  padding:12px;
+  margin:10px 0;
+  border-radius:6px;
+  border:1px solid #ccc;
 }
 
 button{
@@ -35,22 +39,6 @@ button{
   font-size:16px;
   cursor:pointer;
 }
-
-button:hover{
-  background:#e65c00;
-}
-
-.paiement{
-  margin-top:20px;
-  padding:15px;
-  background:#f0f0f0;
-  border-radius:10px;
-}
-
-.paiement img{
-  width:50px;
-  margin:5px;
-}
 </style>
 
 </head>
@@ -58,47 +46,25 @@ button:hover{
 
 <div class="box">
 
-<h2>🛒 Mes Produits</h2>
+<h3>🎬 Vidéo Premium</h3>
+<p><strong>Prix : 1000 FCFA</strong></p>
 
-<!-- PRODUIT 1 -->
-<div class="produit">
-  <h3>🎬 Vidéo Premium</h3>
-  <p><strong>Prix : 1000 FCFA</strong></p>
-  <button onclick="payer(1000, 'Video Premium')">
-    Acheter maintenant
-  </button>
-</div>
+<!-- SEUL INPUT -->
+<input type="tel" id="phone" placeholder="Entrer votre numéro (ex: 699000000)">
 
-<!-- PRODUIT 2 -->
-<div class="produit">
-  <h3>📘 Ebook</h3>
-  <p><strong>Prix : 1500 FCFA</strong></p>
-  <button onclick="payer(1500, 'Ebook')">
-    Acheter maintenant
-  </button>
-</div>
-
-<!-- PRODUIT 3 -->
-<div class="produit">
-  <h3>🎓 Formation</h3>
-  <p><strong>Prix : 3000 FCFA</strong></p>
-  <button onclick="payer(3000, 'Formation')">
-    Acheter maintenant
-  </button>
-</div>
-
-<!-- Moyens de paiement -->
-<div class="paiement">
-  <p>✅ Paiement sécurisé</p>
-  <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/MTN_Logo.svg">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/c/c8/Orange_logo.svg">
-  <p>MTN MoMo & Orange Money acceptés</p>
-</div>
+<button onclick="payer()">Payer maintenant</button>
 
 </div>
 
 <script>
-function payer(prix, produit){
+function payer(){
+
+  let phone = document.getElementById("phone").value;
+
+  if(phone === ""){
+    alert("Veuillez entrer votre numéro");
+    return;
+  }
 
   fetch("https://my-coolpay.com/api/TON_PUBLIC_KEY/paylink", {
     method: "POST",
@@ -107,10 +73,11 @@ function payer(prix, produit){
       "Accept": "application/json"
     },
     body: JSON.stringify({
-      transaction_amount: prix,
+      transaction_amount: 1000,
       transaction_currency: "XAF",
-      transaction_reason: produit,
+      transaction_reason: "Video Premium",
       app_transaction_ref: "ref_" + Date.now(),
+      customer_phone_number: phone,
       customer_name: "Client",
       customer_email: "client@email.com",
       customer_lang: "fr"
