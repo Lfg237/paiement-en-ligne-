@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Paiement</title>
+<style>
+body{font-family:Arial;text-align:center;padding:50px;background:#f5f5f5;}
+.box{max-width:400px;margin:auto;background:white;padding:20px;border-radius:10px;box-shadow:0 0 10px #ccc;}
+button{background:#ff6600;color:white;border:none;padding:12px;width:100%;border-radius:6px;}
+</style>
+</head>
+<body>
+
+<div class="box">
+<h2>Payer maintenant</h2>
+
+<select id="prix">
+<option value="500">500 FCFA</option>
+<option value="1000">1000 FCFA</option>
+<option value="2000">2000 FCFA</option>
+</select>
+
+<input type="tel" id="phone" placeholder="Numéro" style="width:100%;margin:10px 0;padding:10px;">
+
+<button onclick="payer()">Payer</button>
+
+<p id="msg"></p>
+</div>
+
+<script>
+function payer(){
+
+let montant = document.getElementById("prix").value;
+let phone = document.getElementById("phone").value;
+
+fetch("https://my-coolpay.com/api/pay", {
+method: "POST",
+headers: {
+"Content-Type": "application/json",
+"API-KEY": "TON_API_KEY_ICI"
+},
+body: JSON.stringify({
+transaction_amount: montant,
+transaction_phone: phone,
+transaction_reason: "Paiement service",
+return_url: "https://tonsite.vercel.app/success.html",
+cancel_url: "https://tonsite.vercel.app/cancel.html",
+error_url: "https://tonsite.vercel.app/error.html"
+})
+})
+.then(res => res.json())
+.then(data => {
+document.getElementById("msg").innerText = "Confirme sur ton téléphone 📱";
+})
+.catch(err => {
+document.getElementById("msg").innerText = "Erreur ❌";
+});
+
+}
+</script>
+
+</body>
+</html>
