@@ -64,7 +64,6 @@ button{
 <button onclick="payer()">Payer maintenant</button>
 
 </div>
-
 <script>
 function payer(){
 
@@ -87,22 +86,26 @@ function payer(){
       transaction_reason: "Cours éducatif",
       app_transaction_ref: "ref_" + Date.now(),
       customer_phone_number: phone,
-      customer_name: "Client",
-      customer_email: "client@email.com",
+      customer_name: "Michel",
+      customer_email: "konomichel2@gmail.com",
       customer_lang: "fr"
     })
   })
   .then(res => res.json())
- .then(res => res.json())
-.then(data => {
-  console.log(data); // 👈 IMPORTANT
+  .then(data => {
+    console.log("Réponse API:", data);
 
-  if(data.payment_url){
-    window.location.href = data.payment_url;
-  } else {
-    alert("Erreur paiement: " + JSON.stringify(data));
-  }
-});
+    if(data.payment_url){
+      window.location.href = data.payment_url;
+    } else {
+      alert("Erreur paiement: " + JSON.stringify(data));
+    }
+  })
+  .catch(error => {
+    alert("Erreur réseau");
+    console.log(error);
+  });
+
 }
 </script>
 
