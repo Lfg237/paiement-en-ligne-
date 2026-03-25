@@ -64,6 +64,7 @@ button{
 <button onclick="payer()">Payer maintenant</button>
 
 </div>
+
 <script>
 function payer(){
 
@@ -73,6 +74,9 @@ function payer(){
     alert("Veuillez entrer votre numéro");
     return;
   }
+
+  // La clé publique à ajouter dans la requête
+  const publicKey = "8f5536b..."; // Remplacer cette clé par la vraie clé publique
 
   fetch("https://my-coolpay.com/api/a471832d-a539-437f-bcba-247f3e9e607c/paylink", {
     method: "POST",
@@ -88,7 +92,8 @@ function payer(){
       customer_phone_number: phone,
       customer_name: "Michel",
       customer_email: "konomichel2@gmail.com",
-      customer_lang: "fr"
+      customer_lang: "fr",
+      public_key: publicKey // Ajout de la clé publique pour l'authentification de la transaction
     })
   })
   .then(res => res.json())
